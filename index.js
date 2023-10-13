@@ -8,7 +8,6 @@ app.use(express.json());
 require('dotenv').config();
 
 const { Telegraf } = require('telegraf');
-const { error } = require('console');
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
@@ -19,24 +18,28 @@ bot.command('btc', ctx => {
     console.log(ctx.from)
     axios.get(`https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd`)
         .then(response => {
-            console.log(response.data)
-            rate = response.data.ethereum
-            const message = `Hello, today the bitcoin price is ${rate.usd}USD`
-            bot.telegram.sendMessage(ctx.chat.id, message, {
-            })
-        })
+            console.log(response.data);
+            rate = response.data.bitcoin;
+            const message = `Hello, today the bitcoin price is ${rate.usd}USD`;
+            bot.telegram.sendMessage(ctx.chat.id, message, {});
+        }).catch(err => {
+            console.error(err);
+            bot.telegram.sendMessage(ctx.chat.id, 'Can not get the bitcoin price', {});
+        });
 });
 bot.command('eth', ctx => {
     var rate;
     console.log(ctx.from)
     axios.get(`https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd`)
         .then(response => {
-            console.log(response.data)
-            rate = response.data.ethereum
-            const message = `Hello, today the ethereum price is ${rate.usd}USD`
-            bot.telegram.sendMessage(ctx.chat.id, message, {
-            })
-        })
+            console.log(response.data);
+            rate = response.data.ethereum;
+            const message = `Hello, today the ethereum price is ${rate.usd}USD`;
+            bot.telegram.sendMessage(ctx.chat.id, message, {});
+        }).catch(err => {
+            console.error(err);
+            bot.telegram.sendMessage(ctx.chat.id, 'Can not get the ethereum price', {});
+        });
 });
 bot.command('quit', async (ctx) => {
     // Explicit usage
